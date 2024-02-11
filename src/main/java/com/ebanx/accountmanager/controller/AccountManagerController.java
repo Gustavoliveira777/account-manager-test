@@ -18,6 +18,6 @@ public class AccountManagerController {
 
     @PostMapping("/event")
     public ResponseEntity<EventResponseDTO> postEvent(@RequestBody EventRequestDTO request){
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created().build();
     }
 }
