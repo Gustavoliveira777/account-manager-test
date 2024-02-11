@@ -11,4 +11,8 @@ public class AccountTransactionException extends Exception{
         super(message);
         this.returnStatusCode = returnStatusCode;
     }
+    public AccountTransactionException(HttpStatus returnStatusCode, String message, Throwable cause){
+        super(message,cause);
+        this.returnStatusCode = returnStatusCode;
+    }
 }

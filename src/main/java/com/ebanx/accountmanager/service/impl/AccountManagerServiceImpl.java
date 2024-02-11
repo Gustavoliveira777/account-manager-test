@@ -2,31 +2,35 @@ package com.ebanx.accountmanager.service.impl;
 
 import com.ebanx.accountmanager.dto.EventRequestDTO;
 import com.ebanx.accountmanager.dto.EventResponseDTO;
+import com.ebanx.accountmanager.exception.AccountTransactionException;
 import com.ebanx.accountmanager.model.Account;
 import com.ebanx.accountmanager.repository.AccountRepository;
 import com.ebanx.accountmanager.service.AccountManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
+import static com.ebanx.accountmanager.enumerator.TypeActionEnumerator.*;
+
 @Service
 public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountRepository repository;
     @Override
-    public EventResponseDTO eventHandler(EventRequestDTO request) {
-        switch (request.getType()){
-            case DEPOSIT:
-                Account resultado = repository.deposit(request.getDestination(),request.getAmount());
-                return EventResponseDTO.builder().destination(resultado).build();
-            case TRANSFER:
-                //todo
-                break;
-            case WITHDRAW:
-                //todo
-                break;
-            default:
-                break;
-        }
+    public EventResponseDTO eventHandler(EventRequestDTO request) throws AccountTransactionException {
+            if(request.getType() == DEPOSIT){
+                Account result = repository.deposit(request.getDestination(),request.getAmount());
+                return EventResponseDTO.builder().destination(result).build();
+            }else if(request.getType() == TRANSFER) {
+                Map<String, Account> result = repository.transfer(request.getOrigin(), request.getDestination(), request.getAmount());
+                return EventResponseDTO.builder().origin(result.get("origin")).destination(result.get("destination")).build();
+            }else if(request.getType() == WITHDRAW) {
+                Account result = repository.withdraw(request.getOrigin(), request.getAmount());
+                return EventResponseDTO.builder().origin(result).build();
+            }else{
+                //TODO: Implementar o lançamento de evento de exceção para cair no AdvisorController
+            }
         return null;
     }
 

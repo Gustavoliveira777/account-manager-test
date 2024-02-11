@@ -13,10 +13,10 @@ public class Account {
     private Integer accountId;
     private BigDecimal balance;
 
-    public void depositOperation(Double amount){
-        this.balance = this.balance.add(new BigDecimal(amount));
+    public void depositOperation(BigDecimal amount){
+        this.balance = this.balance.add(amount);
     }
-    public void withdrawOperation(Double amount){
-        this.balance = this.balance.subtract(new BigDecimal(amount));
+    public void withdrawOperation(BigDecimal amount){
+        this.balance = this.balance.subtract(amount);
     }
 }
