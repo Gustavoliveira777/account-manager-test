@@ -2,11 +2,17 @@ package com.ebanx.accountmanager.controller;
 
 import com.ebanx.accountmanager.dto.EventRequestDTO;
 import com.ebanx.accountmanager.dto.EventResponseDTO;
+import com.ebanx.accountmanager.model.Account;
+import com.ebanx.accountmanager.service.AccountManagerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountManagerController {
+    @Autowired
+    private AccountManagerService service;
     @PostMapping("/reset")
     public ResponseEntity<String> reset(){
         return ResponseEntity.ok().build();
@@ -18,6 +24,7 @@ public class AccountManagerController {
 
     @PostMapping("/event")
     public ResponseEntity<EventResponseDTO> postEvent(@RequestBody EventRequestDTO request){
-        return ResponseEntity.created().build();
+        EventResponseDTO response = service.eventHandler(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

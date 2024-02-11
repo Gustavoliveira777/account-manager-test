@@ -2,6 +2,7 @@ package com.ebanx.accountmanager.service.impl;
 
 import com.ebanx.accountmanager.dto.EventRequestDTO;
 import com.ebanx.accountmanager.dto.EventResponseDTO;
+import com.ebanx.accountmanager.model.Account;
 import com.ebanx.accountmanager.repository.AccountRepository;
 import com.ebanx.accountmanager.service.AccountManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,10 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private AccountRepository repository;
     @Override
     public EventResponseDTO eventHandler(EventRequestDTO request) {
-        switch (request.type()){
+        switch (request.getType()){
             case DEPOSIT:
-                break;
+                Account resultado = repository.deposit(request.getDestination(),request.getAmount());
+                return EventResponseDTO.builder().destination(resultado).build();
             case TRANSFER:
                 //todo
                 break;

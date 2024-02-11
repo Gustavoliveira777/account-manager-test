@@ -46,5 +46,13 @@ public class AccountRepository {
         return destination;
     }
 
+    public Account transfer(Integer origin, Integer destination, Double amount){
+        Account fromAccount = getAccount(origin);
+        Account toAccount = getAccount(destination);
+        fromAccount.withdrawOperation(amount);
+        toAccount.depositOperation(amount);
+        return toAccount; //TODO: Ajustar para devolver duas contas.
+    }
+
 
 }

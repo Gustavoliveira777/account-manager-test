@@ -1,8 +1,21 @@
 package com.ebanx.accountmanager.dto;
 
 import com.ebanx.accountmanager.enumerator.TypeActionEnumerator;
+import lombok.*;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 
-public record EventRequestDTO(TypeActionEnumerator type, Integer destination, BigDecimal amount) {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EventRequestDTO {
+    @NotNull
+    private TypeActionEnumerator type;
+    private Integer destination;
+    private Integer origin;
+    @NotNull
+    private Double amount;
+
 }
