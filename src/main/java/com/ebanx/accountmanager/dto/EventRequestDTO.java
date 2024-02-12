@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class EventRequestDTO {
     @NotNull
     private TypeActionEnumerator type;

@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class EventResponseDTO{
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Account origin;
