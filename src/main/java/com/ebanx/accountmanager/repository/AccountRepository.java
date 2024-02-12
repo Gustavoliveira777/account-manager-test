@@ -34,15 +34,15 @@ public class AccountRepository {
         } else {
             if (!matches) {
                 throw new AccountTransactionException(HttpStatus.NOT_FOUND, String.format("The account with id %d doesn't exists", accountId));
-            } else {
-                return matches;
             }
+            return matches;
         }
     }
 
     public BigDecimal getBalance(Integer accountId) throws AccountTransactionException {
         isExistentAccount(accountId, true);
         Account account = getAccount(accountId);
+        log.info("Account found! His balance will be returned. Account details: {}", account);
         return account.getBalance();
     }
 
@@ -76,15 +76,26 @@ public class AccountRepository {
 
     public Map<String, Account> transfer(Integer origin, Integer destination, BigDecimal amount) throws AccountTransactionException {
         Account fromAccount = withdraw(origin, amount);
-        log.info("The amount was successfully withdrawn from the source account (ID:{}) and will be deposited in the destination account (ID:{}) ",fromAccount.getAccountId(),destination);
+        log.info("The amount was successfully withdrawn from the source account (ID:{}) and will be deposited in the destination account (ID:{}) ", fromAccount.getAccountId(), destination);
         Account toAccount = deposit(destination, amount);
-        log.info("The amount was successfully deposited into the destination account (ID:{}) ",toAccount.getAccountId());
+        log.info("The amount was successfully deposited into the destination account (ID:{}) ", toAccount.getAccountId());
 
         Map<String, Account> result = new HashMap<>();
         result.put("origin", fromAccount);
         result.put("destination", toAccount);
         log.info("Transfer operation return: {}", result);
         return result;
+    }
+
+    public void reset() throws AccountTransactionException{
+        log.info("The database reset was requested.");
+        log.info("Database registries before the reset: {} | Registries quantity: {}",accounts,accounts.size());
+        accounts.clear();
+        if(accounts.size() != 0){
+            throw new AccountTransactionException(HttpStatus.INTERNAL_SERVER_ERROR, "The database wasn't been reset. Try again later.");
+        }
+        log.info("Database registries after the reset: {} | Registries quantity: {}",accounts,accounts.size());
+
     }
 
 

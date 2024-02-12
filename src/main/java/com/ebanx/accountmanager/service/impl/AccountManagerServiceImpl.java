@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static com.ebanx.accountmanager.enumerator.TypeActionEnumerator.*;
@@ -44,7 +45,17 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public Double getBalance(Integer accountNumber) {
-        return null;
+    public BigDecimal getBalance(Integer accountNumber) throws AccountTransactionException{
+        log.info("BALANCE INQUIRY: Start Process | Account ID received: {}",accountNumber);
+        BigDecimal value = repository.getBalance(accountNumber);
+        log.info("BALANCE INQUIRY: End of Process | Account ID received: {}. Balance returned: {}",accountNumber,value);
+        return value;
+    }
+
+    @Override
+    public void reset() throws AccountTransactionException {
+        log.info("DATABASE CLEARING: Start Process");
+        repository.reset();
+        log.info("DATABASE CLEARING: End of Process");
     }
 }

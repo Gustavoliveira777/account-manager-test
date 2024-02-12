@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @RestController
 @Slf4j
@@ -19,17 +20,22 @@ public class AccountManagerController {
     @Autowired
     private AccountManagerService service;
     @PostMapping("/reset")
-    public ResponseEntity<String> reset(){
+    public ResponseEntity<Integer> reset() throws AccountTransactionException{
+        log.info("A database reset has been requested");
+        service.reset();
+        log.info("A database reset has been processed");
         return ResponseEntity.ok().build();
     }
     @GetMapping("/balance")
-    public ResponseEntity<Double> getBalance(@RequestParam("account_id") Integer accountId){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BigDecimal> getBalance(@RequestParam("account_id") Integer accountId) throws AccountTransactionException {
+        log.info("A balance inquiry request has been received: Account ID to inquiry {}",accountId);
+        BigDecimal balance = service.getBalance(accountId);
+        return ResponseEntity.ok(balance);
     }
 
     @PostMapping("/event")
     public ResponseEntity<EventResponseDTO> postEvent(@Valid @RequestBody EventRequestDTO request) throws AccountTransactionException {
-        log.info("A event has been ingressed: {}",request);
+        log.info("A event has been received: {}",request);
         EventResponseDTO response = service.eventHandler(request);
         log.info("Event response: {}",response);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
