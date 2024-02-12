@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 
 public interface AccountManagerService {
     EventResponseDTO eventHandler(EventRequestDTO request) throws AccountTransactionException;
-    BigDecimal getBalance(Integer accountNumber) throws AccountTransactionException;
+    BigDecimal getBalance(String accountNumber) throws AccountTransactionException;
     void reset() throws AccountTransactionException;
 }

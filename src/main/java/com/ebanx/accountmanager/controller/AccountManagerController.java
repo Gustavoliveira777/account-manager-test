@@ -26,7 +26,7 @@ public class AccountManagerController {
         return ResponseEntity.ok("OK");
     }
     @GetMapping("/balance")
-    public ResponseEntity<BigDecimal> getBalance(@RequestParam("account_id") Integer accountId) throws AccountTransactionException {
+    public ResponseEntity<BigDecimal> getBalance(@RequestParam("account_id") String accountId) throws AccountTransactionException {
         log.info("A balance inquiry request has been received: Account ID to inquiry {}",accountId);
         BigDecimal balance = service.getBalance(accountId);
         return ResponseEntity.ok(balance);

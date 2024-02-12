@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @ToString
 public class Account {
-    private Integer accountId;
+    private String accountId;
     private BigDecimal balance;
 
     public void depositOperation(BigDecimal amount){

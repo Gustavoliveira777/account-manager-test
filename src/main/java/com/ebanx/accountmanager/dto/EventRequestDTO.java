@@ -13,18 +13,18 @@ import java.math.BigDecimal;
 public class EventRequestDTO {
     @NotNull
     private TypeActionEnumerator type;
-    private Integer destination;
-    private Integer origin;
+    private String destination;
+    private String origin;
     @NotNull
     private BigDecimal amount;
 
-    public EventRequestDTO(String type, Integer destination, Integer origin, BigDecimal amount) {
+    public EventRequestDTO(String type, String destination, String origin, BigDecimal amount) {
         this.type = TypeActionEnumerator.valueOf(type);
         this.destination = destination;
         this.origin = origin;
         this.amount = amount;
     }
-    public EventRequestDTO(TypeActionEnumerator type, Integer destination, Integer origin, BigDecimal amount) {
+    public EventRequestDTO(TypeActionEnumerator type, String destination, String origin, BigDecimal amount) {
         this.type = type;
         this.destination = destination;
         this.origin = origin;

@@ -46,7 +46,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public BigDecimal getBalance(Integer accountNumber) throws AccountTransactionException{
+    public BigDecimal getBalance(String accountNumber) throws AccountTransactionException{
         log.info("BALANCE INQUIRY: Start Process | Account ID received: {}",accountNumber);
         BigDecimal value = repository.getBalance(accountNumber);
         log.info("BALANCE INQUIRY: End of Process | Account ID received: {}. Balance returned: {}",accountNumber,value);

@@ -23,11 +23,11 @@ public class AccountRepository {
         this.accounts = new ArrayList<>();
     }
 
-    private Account getAccount(Integer accountId) {
+    private Account getAccount(String accountId) {
         return accounts.stream().filter(account -> account.getAccountId().equals(accountId)).toList().getFirst();
     }
 
-    public boolean isExistentAccount(Integer accountId, boolean advice) throws AccountTransactionException {
+    public boolean isExistentAccount(String accountId, boolean advice) throws AccountTransactionException {
         boolean matches = accounts.stream().anyMatch(account -> account.getAccountId().equals(accountId));
         if (!advice) {
             return matches;
@@ -39,14 +39,14 @@ public class AccountRepository {
         }
     }
 
-    public BigDecimal getBalance(Integer accountId) throws AccountTransactionException {
+    public BigDecimal getBalance(String accountId) throws AccountTransactionException {
         isExistentAccount(accountId, true);
         Account account = getAccount(accountId);
         log.info("Account found! His balance will be returned. Account details: {}", account);
         return account.getBalance();
     }
 
-    public Account deposit(Integer accountId, BigDecimal amount) throws AccountTransactionException {
+    public Account deposit(String accountId, BigDecimal amount) throws AccountTransactionException {
         Account destination;
         if (!isExistentAccount(accountId, false)) {
             log.info("The account with ID: {} doesn't exists. A new account with this ID will be created.", accountId);
@@ -63,7 +63,7 @@ public class AccountRepository {
         return destination;
     }
 
-    public Account withdraw(Integer accountId, BigDecimal amount) throws AccountTransactionException {
+    public Account withdraw(String accountId, BigDecimal amount) throws AccountTransactionException {
         isExistentAccount(accountId, true);
         Account origin = getAccount(accountId);
         log.info("Account found!. Account details: {}", origin);
@@ -74,7 +74,7 @@ public class AccountRepository {
         return origin;
     }
 
-    public Map<String, Account> transfer(Integer origin, Integer destination, BigDecimal amount) throws AccountTransactionException {
+    public Map<String, Account> transfer(String origin, String destination, BigDecimal amount) throws AccountTransactionException {
         Account fromAccount = withdraw(origin, amount);
         log.info("The amount was successfully withdrawn from the source account (ID:{}) and will be deposited in the destination account (ID:{}) ", fromAccount.getAccountId(), destination);
         Account toAccount = deposit(destination, amount);
