@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 public class EventResponseDTO{
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Account origin;
+    private AccountDTO origin;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Account destination;
+    private AccountDTO destination;
 }

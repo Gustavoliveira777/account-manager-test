@@ -3,7 +3,6 @@ package com.ebanx.accountmanager.controller;
 import com.ebanx.accountmanager.dto.EventRequestDTO;
 import com.ebanx.accountmanager.dto.EventResponseDTO;
 import com.ebanx.accountmanager.exception.AccountTransactionException;
-import com.ebanx.accountmanager.model.Account;
 import com.ebanx.accountmanager.service.AccountManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,11 @@ public class AccountManagerController {
     @Autowired
     private AccountManagerService service;
     @PostMapping("/reset")
-    public ResponseEntity<Integer> reset() throws AccountTransactionException{
+    public ResponseEntity<String> reset() throws AccountTransactionException{
         log.info("A database reset has been requested");
         service.reset();
         log.info("A database reset has been processed");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("OK");
     }
     @GetMapping("/balance")
     public ResponseEntity<BigDecimal> getBalance(@RequestParam("account_id") Integer accountId) throws AccountTransactionException {

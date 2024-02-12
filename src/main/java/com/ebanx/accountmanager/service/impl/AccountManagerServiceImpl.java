@@ -6,6 +6,7 @@ import com.ebanx.accountmanager.exception.AccountTransactionException;
 import com.ebanx.accountmanager.model.Account;
 import com.ebanx.accountmanager.repository.AccountRepository;
 import com.ebanx.accountmanager.service.AccountManagerService;
+import com.ebanx.accountmanager.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,19 +26,19 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             if(request.getType() == DEPOSIT){
                 log.info("DEPOSIT: Start Process | Received request: {}",request);
                 Account result = repository.deposit(request.getDestination(),request.getAmount());
-                EventResponseDTO response = EventResponseDTO.builder().destination(result).build();
+                EventResponseDTO response = EventResponseDTO.builder().destination(Utils.AccountMapperToDTO(result)).build();
                 log.info("DEPOSIT: End of Process | Generated response: {}",response);
                 return response;
             }else if(request.getType() == TRANSFER) {
                 log.info("TRANSFER: Start Process | Received request: {}",request);
                 Map<String, Account> result = repository.transfer(request.getOrigin(), request.getDestination(), request.getAmount());
-                EventResponseDTO response = EventResponseDTO.builder().origin(result.get("origin")).destination(result.get("destination")).build();
+                EventResponseDTO response = EventResponseDTO.builder().origin(Utils.AccountMapperToDTO(result.get("origin"))).destination(Utils.AccountMapperToDTO(result.get("destination"))).build();
                 log.info("TRANSFER: End of Process | Generated response: {}",response);
                 return response;
             }else if(request.getType() == WITHDRAW) {
                 log.info("WITHDRAW: Start Process | Received request: {}",request);
                 Account result = repository.withdraw(request.getOrigin(), request.getAmount());
-                EventResponseDTO response = EventResponseDTO.builder().origin(result).build();
+                EventResponseDTO response = EventResponseDTO.builder().origin(Utils.AccountMapperToDTO(result)).build();
                 log.info("WITHDRAW: End of Process | Generated response: {}",response);
                 return response;
             }
