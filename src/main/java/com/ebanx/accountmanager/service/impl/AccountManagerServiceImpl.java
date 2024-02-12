@@ -28,8 +28,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             }else if(request.getType() == WITHDRAW) {
                 Account result = repository.withdraw(request.getOrigin(), request.getAmount());
                 return EventResponseDTO.builder().origin(result).build();
-            }else{
-                //TODO: Implementar o lançamento de evento de exceção para cair no AdvisorController
             }
         return null;
     }

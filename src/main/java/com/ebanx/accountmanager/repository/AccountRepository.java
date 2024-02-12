@@ -23,18 +23,28 @@ public class AccountRepository {
     private Account getAccount(Integer accountId){
        return accounts.stream().filter(account-> account.getAccountId().equals(accountId)).toList().getFirst();
     }
-    public boolean isExistentAccount(Integer accountId){
-        return accounts.stream().anyMatch(account -> account.getAccountId().equals(accountId));
+    public boolean isExistentAccount(Integer accountId, boolean advice) throws AccountTransactionException {
+        boolean matches = accounts.stream().anyMatch(account -> account.getAccountId().equals(accountId));
+        if(!advice){
+            return matches;
+        }else{
+            if(!matches){
+                throw new AccountTransactionException(HttpStatus.NOT_FOUND,String.format("The account with id %d doesn't exists",accountId));
+            }else{
+                return matches;
+            }
+        }
     }
 
-    public Double getBalance(Integer accountId){
+    public Double getBalance(Integer accountId) throws AccountTransactionException {
+        isExistentAccount(accountId,true);
         Account account = getAccount(accountId);
         return account.getBalance().doubleValue();
     }
 
-    public Account deposit(Integer accountId, BigDecimal amount){
+    public Account deposit(Integer accountId, BigDecimal amount) throws AccountTransactionException {
         Account destination;
-        if(!isExistentAccount(accountId)){
+        if(!isExistentAccount(accountId,false)){
             destination = Account.builder().accountId(accountId).balance(amount).build();
             accounts.add(destination);
         }else{
@@ -45,13 +55,10 @@ public class AccountRepository {
     }
 
     public Account withdraw(Integer accountId, BigDecimal amount) throws AccountTransactionException {
-        if(isExistentAccount(accountId)){
+            isExistentAccount(accountId,true);
             Account origin = getAccount(accountId);
             origin.withdrawOperation(amount);
             return origin;
-        }else{
-            throw new AccountTransactionException(HttpStatus.NOT_FOUND,String.format("The account with id %d doesn't exists",accountId));
-        }
     }
 
     public Map<String,Account> transfer(Integer origin, Integer destination, BigDecimal amount) throws AccountTransactionException {
@@ -62,6 +69,7 @@ public class AccountRepository {
         result.put("destination",toAccount);
         return result;
     }
+
 
 
 }
